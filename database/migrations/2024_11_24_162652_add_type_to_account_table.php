@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('type')->nullable();
+        Schema::table('expenses', function (Blueprint $table) {
+            $table->unsignedBigInteger('account_id')->nullable();
+            $table->foreign('account_id')->references('id')->on('accounts');
         });
     }
 
@@ -21,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('type');
+        Schema::table('expenses', function (Blueprint $table) {
+            $table->unsignedBigInteger('account_id');
         });
     }
 };

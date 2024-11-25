@@ -11,8 +11,10 @@ class Expense extends Model
     protected $fillable = [
         'amount',
         'date',
+        'user_id',
+        'category_id',
         'description',
-        'user_id'
+        'account_id'
     ];
 
     public function user()
@@ -23,5 +25,10 @@ class Expense extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
     }
 }

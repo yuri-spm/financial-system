@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AccountResource\Pages;
-use App\Filament\Resources\AccountResource\RelationManagers;
-use App\Models\Account;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Account;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\AccountResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\AccountResource\RelationManagers;
 
 class AccountResource extends Resource
 {
@@ -19,6 +20,7 @@ class AccountResource extends Resource
     protected static ?string $model = Account::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Cadastro';
 
     public static function form(Form $form): Form
     {
@@ -34,9 +36,8 @@ class AccountResource extends Resource
                 Forms\Components\TextInput::make('balance')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Hidden::make('user_id')
+                    ->default(Auth::user()->id),
             ]);
     }
 
@@ -51,7 +52,7 @@ class AccountResource extends Resource
                 Tables\Columns\TextColumn::make('balance')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
