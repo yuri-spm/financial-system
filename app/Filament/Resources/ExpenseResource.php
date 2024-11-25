@@ -20,33 +20,37 @@ class ExpenseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Despesas';
+    protected static ?string $modelLabel = 'Conta';
+    protected static ?string $modelPluralLabel = 'Contas';
+
 
     public static function form(Form $form): Form
     {
         return $form
-           ->columns(1)
-            ->schema([
-                Forms\Components\TextInput::make('amount')
-                    ->label('Valor')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\Select::make('category_id')
-                    ->label('Categoria')
-                    ->relationship('category','name')
-                    ->required(),
-                Forms\Components\Select::make('account_id')
-                    ->label('Conta')
-                    ->relationship('account','name'),
-                Forms\Components\DatePicker::make('date')
-                    ->label('Data')
-                    ->required(),
-                Forms\Components\TextInput::make('description')
-                    ->label('Descrição')
-                    ->maxLength(255),
-                Forms\Components\Hidden::make('user_id')
-                    ->default(Auth::user()->id),
-              
-            ]);
+        ->schema([
+            Forms\Components\TextInput::make('amount')
+                ->label('Valor')
+                ->required()
+                ->minValue(0)
+                ->numeric(),
+            Forms\Components\Select::make('account_id')
+                ->label('Conta')
+                ->relationship('account','name'),
+            Forms\Components\Select::make('category_id')
+                ->label('Categoria')
+                ->searchable()
+                ->relationship('category','name'),  
+            Forms\Components\DatePicker::make('date')
+                ->label('Data')
+                ->required(),
+            Forms\Components\TextInput::make('description')
+                ->label('Descrição')
+                ->maxLength(255),
+            Forms\Components\Hidden::make('user_id')
+                ->default(Auth::user()->id),
+          
+        ]);
+
     }
 
     public static function table(Table $table): Table
@@ -59,15 +63,15 @@ class ExpenseResource extends Resource
                 Tables\Columns\TextColumn::make('date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('account.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category.name')
+                Tables\Columns\TextColumn::make('category_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('account_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -83,8 +87,8 @@ class ExpenseResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -93,19 +97,10 @@ class ExpenseResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExpenses::route('/'),
-            'create' => Pages\CreateExpense::route('/create'),
-            'edit' => Pages\EditExpense::route('/{record}/edit'),
+            'index' => Pages\ManageExpenses::route('/'),
         ];
     }
 }

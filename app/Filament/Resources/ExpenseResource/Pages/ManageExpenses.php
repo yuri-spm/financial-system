@@ -4,9 +4,9 @@ namespace App\Filament\Resources\ExpenseResource\Pages;
 
 use App\Filament\Resources\ExpenseResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListExpenses extends ListRecords
+class ManageExpenses extends ManageRecords
 {
     protected static string $resource = ExpenseResource::class;
 

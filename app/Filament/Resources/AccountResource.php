@@ -16,7 +16,6 @@ use App\Filament\Resources\AccountResource\RelationManagers;
 
 class AccountResource extends Resource
 {
-    
     protected static ?string $model = Account::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -29,13 +28,11 @@ class AccountResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('type')
-                    ->required()
-                    ->maxLength(255),
-                
                 Forms\Components\TextInput::make('balance')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('type')
+                    ->maxLength(255),
                 Forms\Components\Hidden::make('user_id')
                     ->default(Auth::user()->id),
             ]);
@@ -47,13 +44,12 @@ class AccountResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('balance')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('type')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -69,6 +65,7 @@ class AccountResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -77,19 +74,10 @@ class AccountResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAccounts::route('/'),
-            'create' => Pages\CreateAccount::route('/create'),
-            'edit' => Pages\EditAccount::route('/{record}/edit'),
+            'index' => Pages\ManageAccounts::route('/'),
         ];
     }
 }
