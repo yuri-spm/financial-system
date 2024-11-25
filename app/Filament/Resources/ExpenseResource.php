@@ -30,6 +30,7 @@ class ExpenseResource extends Resource
         ->schema([
             Forms\Components\TextInput::make('amount')
                 ->label('Valor')
+                ->prefix('R$')
                 ->required()
                 ->minValue(0)
                 ->numeric(),
@@ -58,17 +59,17 @@ class ExpenseResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
+                    ->money('BRL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category_id')
+                Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('account_id')

@@ -30,6 +30,7 @@ class AccountResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('balance')
                     ->required()
+                    ->prefix('R$')
                     ->numeric(),
                 Forms\Components\TextInput::make('type')
                     ->maxLength(255),
@@ -45,7 +46,7 @@ class AccountResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('balance')
-                    ->numeric()
+                    ->money('BRL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
