@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::hex('#014bde'),
             ])
             ->font('Nunito')
+            //->topNavigation()
             ->brandName('Laravel Financias')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

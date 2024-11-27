@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 
-class Expense extends Model
+class Transactions extends Model
 {
     protected $fillable = [
-        'amount',
-        'date',
-        'user_id',
-        'category_id',
+        'title',
         'description',
-        'account_id'
+        'amount',
+        'type',
+        'transaction_date',
+        'category_id',
+        'account_id',
+        'user_id',
+        'is_recurring',
+        'attachment'
+
     ];
 
     public function user()

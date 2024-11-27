@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     protected $fillable = [
-        'name'
+        'name',
+        'is_active'
     ];
 
     public function expense()
     {
-        return $this->belongsTo(Expense::class);
+        return $this->belongsTo(Transactions::class);
     }
 }

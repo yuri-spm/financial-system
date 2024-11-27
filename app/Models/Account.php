@@ -11,6 +11,7 @@ class Account extends Model
         'balance',
         'type',
         'user_id',
+        'type'
     ];
 
 
@@ -21,6 +22,6 @@ class Account extends Model
 
     public function expense()
     {
-        return $this->belongsTo(Expense::class);
+        return $this->belongsTo(Transactions::class);
     }
 }

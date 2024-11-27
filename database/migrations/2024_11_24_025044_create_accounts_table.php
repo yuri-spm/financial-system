@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('balance',10,2);
-            $table->string('type')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->decimal('balance',15,2);
+            $table->foreignId('user_id')->constrained('users'); 
+            $table->enum('type', ['bank','wallet', 'credit_card', 'meal_voucher']);
             $table->timestamps();
         });
     }
