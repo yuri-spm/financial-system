@@ -59,7 +59,8 @@ class AccountResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('balance')
                     ->label('Saldo')
-                    ->numeric()
+                    ->numeric(locale: 'pt_br')
+                    ->money('BRL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Usuário')

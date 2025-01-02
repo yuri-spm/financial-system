@@ -14,7 +14,11 @@ use App\TransactionsTypeEnum;
 use Filament\Resources\Resource;
 use Illuminate\Support\Collection;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\TransactionsResource\Pages;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class TransactionsResource extends Resource
@@ -51,6 +55,8 @@ class TransactionsResource extends Resource
                      ->required(),
                 Forms\Components\DatePicker::make('transaction_date')
                     ->label('Data da Transação')
+                    ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->required(),
                 Forms\Components\Select::make('category_id')
                      ->label('Categoria')
@@ -84,6 +90,7 @@ class TransactionsResource extends Resource
                     ->label('Descrição')
                     ->columnSpanFull(),
                 FileUpload::make('attachment')
+                    ->label("Comprovante")
             ]);
     }
 
@@ -108,8 +115,9 @@ class TransactionsResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Data da Transação')
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable()
+
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Categoria')
@@ -130,7 +138,7 @@ class TransactionsResource extends Resource
                     ->label('Recorrente')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('attachment')
-                    ->label('Anexo')
+                    ->label("Comprovante")
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
@@ -143,7 +151,43 @@ class TransactionsResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('Tipo de conta')
+                ->relationship('account', 'name')
+                ->searchable()
+                ->preload()
+                ->label('Conta')
+                ->indicator('Conta'),
+
+              SelectFilter::make('Tipo de categoria')
+                ->relationship('category', 'name')
+                ->searchable()
+                ->preload()     
+                ->label('Categoria')
+                ->indicator('Tipo de categoria'),
+
+            Filter::make('transaction_date')
+                    ->form([
+                        DatePicker::make('created_from')
+                            ->label('Data inicial')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
+                        DatePicker::make('created_until')
+                            ->label('Data inicial')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('transaction_date', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('transaction_date', '<=', $date),
+                            );
+    })
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
