@@ -62,6 +62,7 @@ class TransactionsResource extends Resource
                      ->searchable()
                      ->preload()
                      ->required()
+                     ->live(onBlur: true)
                      ->afterStateUpdated(function (callable $set) {
                          $set('account_id', null);
                      }),
@@ -76,7 +77,6 @@ class TransactionsResource extends Resource
                      })
                      ->native(false)
                      ->searchable()
-                     ->preload()
                      ->required(),
                 Forms\Components\Toggle::make('is_recurring')
                     ->required(),
@@ -99,7 +99,9 @@ class TransactionsResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
-                    ->label('Tipo'),
+                    ->label('Tipo')
+                    ->formatStateUsing(fn ($state) 
+                        => $state ? TransactionsTypeEnum::from($state)->getLabel() : '-'),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Data da Transação')
                     ->date()
