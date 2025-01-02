@@ -8,7 +8,7 @@ use Filament\Support\Contracts\HasLabel;
 enum TransactionsTypeEnum:string implements HasLabel
 {
     case Expense  = 'expense';
-    case Income = 'Income';
+    case Income = 'income';
 
     public function getLabel(): ?string
     {

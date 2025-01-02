@@ -93,36 +93,46 @@ class TransactionsResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->label('Nome')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Valor')
-                    ->numeric()
-                    ->sortable(),
+                    ->numeric(locale: 'pt_br')
+                    ->money('BRL')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipo')
                     ->formatStateUsing(fn ($state) 
-                        => $state ? TransactionsTypeEnum::from($state)->getLabel() : '-'),
+                        => $state ? TransactionsTypeEnum::from($state)->getLabel() : '-')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Data da Transação')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Categoria')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('account.name')
                     ->label('Conta')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Usuário')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\ToggleColumn::make('is_recurring')
-                    ->label('Recorrente'),
+                    ->label('Recorrente')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('attachment')
                     ->label('Anexo')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -138,6 +148,13 @@ class TransactionsResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('clone')
+                    ->label('Clonar')
+                    ->action(function(Transactions $record){
+                        $newTransaction = $record->replicate();
+                        $newTransaction->transaction_date = now();
+                        $newTransaction->save();
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
