@@ -5,18 +5,17 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Account;
+use Filament\Forms\Get;
 use App\Models\Category;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Transactions;
 use App\TransactionsTypeEnum;
 use Filament\Resources\Resource;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 use Filament\Forms\Components\FileUpload;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TransactionsResource\Pages;
-use App\Filament\Resources\TransactionsResource\RelationManagers;
+
 
 class TransactionsResource extends Resource
 {
@@ -57,12 +56,21 @@ class TransactionsResource extends Resource
                      ->label('Categoria')
                      ->options(Category::all()->pluck('name', 'id'))
                      ->searchable(),
-                Forms\Components\Select::make('account_id')
-                     ->label('Conta')
-                     ->options(Account::all()->pluck('name', 'id'))
-                     ->searchable(),
-                Forms\Components\Hidden::make('user_id')
-                     ->default(Auth::user()->id),
+                Forms\Components\Select::make('user_id')
+                    ->relationship(name: 'user', titleAttribute:'name')
+                    ->native(false)
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                    Forms\Components\Select::make('account_id')
+                    ->label('Conta')
+                    ->options(fn (callable $get) => 
+                        Account::query()
+                            ->where('user_id', $get('user_id')) 
+                            ->pluck('name', 'id')
+                    )
+                    ->searchable()
+                    ->required(),
                 Forms\Components\Toggle::make('is_recurring')
                     ->required(),
                 Forms\Components\Textarea::make('description')
