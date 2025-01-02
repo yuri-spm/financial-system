@@ -57,20 +57,27 @@ class TransactionsResource extends Resource
                      ->options(Category::all()->pluck('name', 'id'))
                      ->searchable(),
                 Forms\Components\Select::make('user_id')
-                    ->relationship(name: 'user', titleAttribute:'name')
-                    ->native(false)
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                    Forms\Components\Select::make('account_id')
-                    ->label('Conta')
-                    ->options(fn (callable $get) => 
-                        Account::query()
-                            ->where('user_id', $get('user_id')) 
-                            ->pluck('name', 'id')
-                    )
-                    ->searchable()
-                    ->required(),
+                     ->relationship(name: 'user', titleAttribute: 'name')
+                     ->native(false)
+                     ->searchable()
+                     ->preload()
+                     ->required()
+                     ->afterStateUpdated(function (callable $set) {
+                         $set('account_id', null);
+                     }),
+                 Forms\Components\Select::make('account_id')
+                     ->label('Conta')
+                     ->options(function (callable $get) {
+                         $userId = $get('user_id'); 
+                 
+                         return Account::query()
+                             ->where('user_id', $userId) 
+                             ->pluck('name', 'id');
+                     })
+                     ->native(false)
+                     ->searchable()
+                     ->preload()
+                     ->required(),
                 Forms\Components\Toggle::make('is_recurring')
                     ->required(),
                 Forms\Components\Textarea::make('description')
