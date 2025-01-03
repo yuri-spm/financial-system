@@ -34,4 +34,24 @@ class Transactions extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function scopeExpense($query)
+    {
+        return $query->where('type', 'expense');
+    }
+
+    public function scopeIncome($query)
+    {
+        return $query->where('type', 'income');
+    }
+
+    public static function sumExpense()
+    {
+        return self::query()->expense()->sum('amount');
+    }
+
+    public static function sumIncome()
+    {
+        return self::query()->income()->sum('amount');
+    }
 }
