@@ -18,6 +18,7 @@ class TransactionsYuriChart extends ChartWidget
         $incomeData = Trend::query(
             Transactions::query()
                 ->where('type', 'income')
+                ->where('user_id', 1)
         )
         ->between(
             start: now()->startOfYear(),
@@ -28,7 +29,9 @@ class TransactionsYuriChart extends ChartWidget
         ->sum('amount');
 
         $expenseData = Trend::query(
-            Transactions::query()->where('type', 'expense')
+            Transactions::query()
+                ->where('type', 'expense')
+                ->where('user_id', 1)
         )
         ->between(
             start: now()->startOfYear(),
