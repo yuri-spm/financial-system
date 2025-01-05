@@ -20,22 +20,20 @@ class ManageTransactions extends ManageRecords
         ];
     }
 
-    public function getTabs(): array
-    {
-        $tabs = [];
+    // public function getTabs(): array
+    // {
+    //     $tabs = [];
 
-        $filterType = request()->query('filter_tipo_de_categoria');
+    //     $sumExpenses = Transactions::sumExpense();
+    //     $sumIncome = Transactions::sumIncome();
 
-        $sumExpenses = Transactions::sumExpense();
-        $sumIncome = Transactions::sumIncome();
+    //     $tabs[] = Tab::make('Total de Despesas (R$' . number_format($sumExpenses, 2, ',', '.') . ')')
+    //      ->modifyQueryUsing(fn (Builder $query) => $query->expense());
 
-        $tabs[] = Tab::make('Total de Despesas (R$' . number_format($sumExpenses, 2, ',', '.') . ')')
-         ->modifyQueryUsing(fn (Builder $query) => $query->expense());
+    //     $tabs[] = Tab::make('Total de Proventos (R$'. number_format($sumIncome, 2, ',', '.'). ')')
+    //      ->modifyQueryUsing(fn(Builder $query) => $query->income());
 
-        $tabs[] = Tab::make('Total de Proventos (R$'. number_format($sumIncome, 2, ',', '.'). ')')
-         ->modifyQueryUsing(fn(Builder $query) => $query->income());
-
-        return $tabs;
-    }
+    //     return $tabs;
+    // }
 
 }

@@ -101,19 +101,16 @@ class TransactionsResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->label('Nome')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Valor')
                     ->numeric(locale: 'pt_br')
                     ->money('BRL')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipo')
                     ->formatStateUsing(fn ($state) 
-                        => $state ? TransactionsTypeEnum::from($state)->getLabel() : '-')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                        => $state ? TransactionsTypeEnum::from($state)->getLabel() : '-'),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Data da Transação')
                     ->date('d/m/Y')
@@ -133,8 +130,7 @@ class TransactionsResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Usuário')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 Tables\Columns\ToggleColumn::make('is_recurring')
                     ->label('Recorrente')
                     ->toggleable(isToggledHiddenByDefault: true),
