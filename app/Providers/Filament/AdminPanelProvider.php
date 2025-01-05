@@ -7,7 +7,6 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Illuminate\Support\Facades\Auth;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
