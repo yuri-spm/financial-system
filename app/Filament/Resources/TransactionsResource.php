@@ -106,6 +106,7 @@ class TransactionsResource extends Resource
                     ->label('Valor')
                     ->numeric(locale: 'pt_br')
                     ->money('BRL')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipo')
@@ -130,6 +131,7 @@ class TransactionsResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Usuário')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('is_recurring')
                     ->label('Recorrente')
